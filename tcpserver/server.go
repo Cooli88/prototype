@@ -1,13 +1,15 @@
 package tcpserver
 
 import (
+	"device-listener-go/dto"
+	"device-listener-go/parse"
+	"device-listener-go/rabbit"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"os"
-	"device-listener-go/dto"
-	"device-listener-go/parse"
 )
 
 const (
@@ -85,8 +87,11 @@ func handleRequestDataPayload(conn net.Conn, deviceImei string) {
 	if allRecords.Error == nil {
 		for _, record := range allRecords.Records {
 			dataToRabbit := dto.CreateDataToRabbitFromRecord(deviceImei, record)
+			b, err := json.Marshal(dataToRabbit)
+			rabbit.SendMessage(b)
 			fmt.Printf("record: %+v\n", record)
 			fmt.Printf("dataToRabbit: %+v\n", dataToRabbit)
+			fmt.Printf("Marshal err: %+v\n", err)
 		}
 		binary.BigEndian.PutUint32(answerBuf, uint32(allRecords.NumberOfData))
 	}
