@@ -6,8 +6,8 @@ import (
 	"io"
 	"net"
 	"os"
-	"telparse/dto"
-	"telparse/parse"
+	"device-listener-go/dto"
+	"device-listener-go/parse"
 )
 
 const (

@@ -1,7 +1,7 @@
 package main
 
 import (
-        "telparse/tcpserver"
+        "device-listener-go/tcpserver"
 )
 
 func main() {

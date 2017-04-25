@@ -1,6 +1,6 @@
 package dto
 
-import "telparse/parse"
+import "device-listener-go/parse"
 
 //mileage: null,
 //customIds: ''
