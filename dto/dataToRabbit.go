@@ -1,6 +1,9 @@
 package dto
 
-import "device-listener-go/parse"
+import (
+	"device-listener-go/parse"
+	"fmt"
+)
 
 const (
 	Acc         = 1
@@ -44,6 +47,19 @@ type DataToRabbit struct {
 	Pdop        int64   `json:"pdop"`
 	Hdop        int64   `json:"hdop"`
 	CustomIds   string  `json:"customIds"`
+}
+
+type DataToRabbitArr []DataToRabbit
+
+func CreateDataToRabbitFromRecords(records parse.Data, deviceImei string) DataToRabbitArr {
+	dataToRabbitArr := []DataToRabbit{}
+	for _, record := range records.Records {
+		dataToRabbit := CreateDataToRabbitFromRecord(deviceImei, record)
+		dataToRabbitArr = append(dataToRabbitArr, dataToRabbit)
+		fmt.Printf("record: %+v\n", record)
+		fmt.Printf("dataToRabbit: %+v\n", dataToRabbit)
+	}
+	return dataToRabbitArr
 }
 
 func CreateDataToRabbitFromRecord(imei string, record parse.Record) DataToRabbit {

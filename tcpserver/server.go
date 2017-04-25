@@ -85,14 +85,9 @@ func handleRequestDataPayload(conn net.Conn, deviceImei string) {
 	answerBuf := make([]byte, 4)
 
 	if allRecords.Error == nil {
-		for _, record := range allRecords.Records {
-			dataToRabbit := dto.CreateDataToRabbitFromRecord(deviceImei, record)
-			b, err := json.Marshal(dataToRabbit)
-			rabbit.SendMessage(b)
-			fmt.Printf("record: %+v\n", record)
-			fmt.Printf("dataToRabbit: %+v\n", dataToRabbit)
-			fmt.Printf("Marshal err: %+v\n", err)
-		}
+		dataToRabbitArr := dto.CreateDataToRabbitFromRecords(allRecords, deviceImei)
+		b, _ := json.Marshal(dataToRabbitArr)
+		rabbit.SendMessage(b)
 		binary.BigEndian.PutUint32(answerBuf, uint32(allRecords.NumberOfData))
 	}
 	conn.Write(answerBuf)
