@@ -28,8 +28,8 @@ func SendMessage(body []byte) {
 
 	q, err := ch.QueueDeclare(
 		queueName, // name
-		false,     // durable
-		false,     // delete when unused
+		true,      // durable
+		true,      // delete when unused
 		false,     // exclusive
 		false,     // no-wait
 		nil,       // arguments
