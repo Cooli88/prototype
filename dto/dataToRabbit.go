@@ -103,7 +103,7 @@ func (dataToRabbit *DataToRabbit) setIoElements(record parse.Record) {
 }
 
 func (dataToRabbit *DataToRabbit) setAcc(record parse.Record) {
-        if _, ok := record.IOElements[Acc]; !ok {
+        if _, ok := record.IOElements[Acc]; ok {
                 switch record.IOElements[Acc] {
                 case 1:
                         dataToRabbit.Acc = 0
@@ -114,7 +114,7 @@ func (dataToRabbit *DataToRabbit) setAcc(record parse.Record) {
 }
 
 func (dataToRabbit *DataToRabbit) setDoor(record parse.Record) {
-        if _, ok := record.IOElements[Door]; !ok {
+        if _, ok := record.IOElements[Door]; ok {
                 switch record.IOElements[Door] {
                 case 1:
                         dataToRabbit.Door = 0
@@ -125,13 +125,13 @@ func (dataToRabbit *DataToRabbit) setDoor(record parse.Record) {
 }
 
 func (dataToRabbit *DataToRabbit) setGsm(record parse.Record) {
-        if _, ok := record.IOElements[Gsm]; !ok {
+        if _, ok := record.IOElements[Gsm]; ok {
                 dataToRabbit.Gsm = record.IOElements[Gsm]
         }
 }
 
 func (dataToRabbit *DataToRabbit) setStop(record parse.Record) {
-        if _, ok := record.IOElements[Stop]; !ok {
+        if _, ok := record.IOElements[Stop]; ok {
                 switch record.IOElements[Stop] {
                 case 1:
                         dataToRabbit.IsStop = 0
@@ -142,19 +142,19 @@ func (dataToRabbit *DataToRabbit) setStop(record parse.Record) {
 }
 
 func (dataToRabbit *DataToRabbit) setPdop(record parse.Record) {
-        if _, ok := record.IOElements[Pdop]; !ok {
+        if _, ok := record.IOElements[Pdop]; ok {
                 dataToRabbit.Pdop = record.IOElements[Pdop]
         }
 }
 
 func (dataToRabbit *DataToRabbit) setHdop(record parse.Record) {
-        if _, ok := record.IOElements[Hdop]; !ok {
+        if _, ok := record.IOElements[Hdop]; ok {
                 dataToRabbit.Hdop = record.IOElements[Hdop]
         }
 }
 
 func (dataToRabbit *DataToRabbit) setMileage(record parse.Record) {
-        if _, ok := record.IOElements[Odometer]; !ok {
+        if _, ok := record.IOElements[Odometer]; ok {
                 dataToRabbit.Mileage = record.IOElements[Odometer]
         }
 }

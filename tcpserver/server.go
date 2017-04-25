@@ -85,6 +85,7 @@ func handleRequestDataPayload(conn net.Conn, deviceImei string) {
 	if allRecords.Error == nil {
 		for _, record := range allRecords.Records {
 			dataToRabbit := dto.CreateDataToRabbitFromRecord(deviceImei, record)
+			fmt.Printf("record: %+v\n", record)
 			fmt.Printf("dataToRabbit: %+v\n", dataToRabbit)
 		}
 		binary.BigEndian.PutUint32(answerBuf, uint32(allRecords.NumberOfData))
