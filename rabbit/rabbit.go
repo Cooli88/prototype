@@ -1,13 +1,16 @@
 package rabbit
 
 import (
+	"fmt"
 	"github.com/streadway/amqp"
 	"log"
+	"os"
 )
 
 const (
-	rabbitUrlConnect = "amqp://rabbit:ujkjdjyju@parking-rabbit-dev"
-	queueName        = "prkm-device-message"
+	rabbitUrlConnect  = "amqp://rabbit:ujkjdjyju@parking-rabbit-dev"
+	rabbitUrlTemplate = "amqp://%s:%s@%s"
+	queueName         = "prkm-device-message"
 )
 
 func failOnError(err error, msg string) {
@@ -18,7 +21,8 @@ func failOnError(err error, msg string) {
 
 //refactor
 func SendMessage(body []byte) {
-	conn, err := amqp.Dial(rabbitUrlConnect)
+	urlToConnectRabbit := fmt.Sprintf(rabbitUrlTemplate, os.Getenv("RABBIT_USER"), os.Getenv("RABBIT_PASSWORD"), os.Getenv("RABBIT_HOST"))
+	conn, err := amqp.Dial(urlToConnectRabbit)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -29,7 +33,7 @@ func SendMessage(body []byte) {
 	q, err := ch.QueueDeclare(
 		queueName, // name
 		true,      // durable
-		true,      // delete when unused
+		false,     // delete when unused
 		false,     // exclusive
 		false,     // no-wait
 		nil,       // arguments
