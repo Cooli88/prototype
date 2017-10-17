@@ -1,20 +1,21 @@
 package tcpserver
 
 import (
-	"device-listener-go/dto"
-	"device-listener-go/parse"
-	"device-listener-go/rabbit"
+    "device-listener-go-new-device/dto"
+    "device-listener-go-new-device/parse"
+    "device-listener-go-new-device/rabbit"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"os"
+    "go.uber.org/zap"
 )
 
 const (
 	CONN_HOST = "0.0.0.0"
-	CONN_PORT = "7610"
+    CONN_PORT = "7066"
 	CONN_TYPE = "tcp"
 )
 
@@ -40,8 +41,8 @@ func ServerStart() {
 		fmt.Printf("%d: %v <-> %v\n", countConnection, conn.LocalAddr(), conn.RemoteAddr())
 		// Handle connections in a new goroutine.
 		go func(conn net.Conn) {
-			deviceImei := handleRequestImei(conn)
-			handleRequestDataPayload(conn, deviceImei)
+            handleRequestImei(conn)
+            //handleRequestDataPayload(conn, deviceImei)
 			conn.Close()
 		}(conn)
 	}
@@ -49,7 +50,11 @@ func ServerStart() {
 
 // Handles incoming requests.
 func handleRequestImei(conn net.Conn) string {
-	var deviceImei string
+    logger, _ := zap.NewProduction()
+    sugar := logger.Sugar()
+    sugar.Infow("App start.", )
+
+    var deviceImei string = "123"
 	buf := make([]byte, 4096)
 	countBytes, err := conn.Read(buf)
 
@@ -58,6 +63,13 @@ func handleRequestImei(conn net.Conn) string {
 	}
 
 	message := buf[:countBytes]
+
+    sugar.Infow("buf.", buf)
+    sugar.Infow("message.", message)
+    sugar.Infow("countBytes.", countBytes)
+    fmt.Printf("err answer: %+v\n", buf)
+    fmt.Printf("err answer: %+v\n", message)
+    fmt.Printf("err answer: %+v\n", countBytes)
 
 	if countBytes == 17 {
 		deviceImei = string(message)
@@ -71,7 +83,7 @@ func handleRequestImei(conn net.Conn) string {
 
 // Handles incoming requests.
 func handleRequestDataPayload(conn net.Conn, deviceImei string) {
-	buf := make([]byte, 4096)
+    buf := make([]byte, 1800)
 	countBytes, err := conn.Read(buf)
 
 	if err == io.EOF {
